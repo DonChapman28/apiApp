@@ -14,15 +14,12 @@ app.use(cors());
 
 // Configuración de la conexión a la base de datos PostgreSQL
 const pool = new Pool({
-  host: 'dpg-cnu6m2uct0pc73e49m9g-a.oregon-postgres.render.com',
+  host: 'dpg-coi2rrdjm4es739hoqh0-a.oregon-postgres.render.com',
   user: 'admin',
-  password: 'Zk4eFxNCiRqpHWAosvCX2XgTqbh3fxRR',
-  database: 'registros_haoe',
+  password: '27mkJDxEeTgFA9oWunHDm889rp5vHEyu',
+  database: 'bd_portafolio_filr',
   ssl: {
-    rejectUnauthorized: false, // Para evitar errores de certificado no autorizado, úsalo con precaución
-    // Puedes proporcionar la ruta a los archivos de certificado y clave privada si los estás utilizando
-    // cert: fs.readFileSync('/ruta/al/archivo/certificado.pem'),
-    // key: fs.readFileSync('/ruta/al/archivo/clave_privada.key'),
+    rejectUnauthorized: false, 
   },
 });
 
@@ -35,9 +32,9 @@ pool.connect((err, client, release) => {
   console.log('Conexión a la base de datos PostgreSQL establecida');
 });
 
-app.get('/api/datos', (req, res) => {
+app.get('/wanolo', (req, res) => {
   // consulta bd
-  pool.query('SELECT * FROM registros ORDER BY id DESC', (error, results) => {
+  pool.query('SELECT * FROM empleado', (error, results) => {
     if (error) {
       console.error('Error al realizar la consulta: ', error);
       res.status(500).json({ error: 'Error al obtener datos' });
@@ -48,24 +45,9 @@ app.get('/api/datos', (req, res) => {
   });
 });
 
-app.get('/api/datosfechaactual', (req, res) => {
-  // consulta bd
-  pool.query('SELECT * FROM registros WHERE fecha = CURRENT_DATE ORDER BY id DESC', (error, results) => {
-    if (error) {
-      console.error('Error al realizar la consulta: ', error);
-      res.status(500).json({ error: 'Error al obtener datos' });
-      return;
-    }
-    res.json(results.rows);
-    console.log('select');
-  });
-});
-
-app.get('/api/datos/filtro', (req, res) => {
-  const fecha = req.query.fecha; // Extraer la fecha de la solicitud
-  const query = 'SELECT * FROM registros WHERE fecha = $1 ORDER BY id DESC';
+app.get('/api/registro', (req, res) => {
   
-  pool.query(query, [fecha], (error, results) => {
+  pool.query('SELECT * FROM registro', (error, results) => {
     if (error) {
       console.error('Error al realizar la consulta: ', error);
       res.status(500).json({ error: 'Error al obtener datos' });
@@ -76,9 +58,23 @@ app.get('/api/datos/filtro', (req, res) => {
   });
 });
 
-app.post('/api/datos', (req, res) => {
+app.post('/api/insertRegistro', (req, res) => {
   const { rut, entrada, salida, tipo, nDocumento} = req.body; // Datos del cuerpo de la solicitud
-  const query = 'INSERT INTO registros (rut, entrada, salida, tipo, nDocumento, fecha) VALUES ($1, $2, $3, $4, $5, current_date)';
+  const query = 'INSERT INTO registro (id_registro, fecha_entrada, fecha_salida, empleado_id_emp, espacio_id_esp) VALUES ($1, $2, $3, $4, $5)';
+  pool.query(query, [rut, entrada, salida, tipo, nDocumento], (error, results) => {
+    if (error) {
+      console.error('Error al insertar datos: ', error);
+      res.status(500).json({ error: 'Error al insertar datos' });
+      return;
+    }
+    res.json({ message: 'Datos insertados correctamente' });
+    console.log('insert');
+  });
+});
+
+app.post('/api/observacion', (req, res) => {
+  const { rut, entrada, salida, tipo, nDocumento} = req.body; // Datos del cuerpo de la solicitud
+  const query = 'INSERT INTO observacion (descripcion, registro_id_registro, tipo_observacion_id_categoria) VALUES ($1, $2, $3)';
   pool.query(query, [rut, entrada, salida, tipo, nDocumento], (error, results) => {
     if (error) {
       console.error('Error al insertar datos: ', error);
