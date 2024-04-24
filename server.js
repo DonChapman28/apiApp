@@ -32,9 +32,12 @@ pool.connect((err, client, release) => {
   console.log('Conexión a la base de datos PostgreSQL establecida');
 });
 
-app.get('/wanolo', (req, res) => {
-  // consulta bd
-  pool.query('SELECT * FROM empleado', (error, results) => {
+app.get('/login', (req, res) => {
+  const rut = req.query.rut; // Extraer la fecha de la solicitud
+  const contra_emp = req.query.contra_emp // Extraer la fecha de la solicitud
+  const query = 'SELECT * FROM empleado WHERE rut = $1 and contra_emp = $2';
+  
+  pool.query(query, [rut,contra_emp], (error, results) => {
     if (error) {
       console.error('Error al realizar la consulta: ', error);
       res.status(500).json({ error: 'Error al obtener datos' });
@@ -45,6 +48,20 @@ app.get('/wanolo', (req, res) => {
   });
 });
 
+
+
+app.get('/empleado', (req, res) => {
+  
+  pool.query('SELECT * FROM empleado', (error, results) => {
+    if (error) {
+      console.error('Error al realizar la consulta: ', error);
+      res.status(500).json({ error: 'Error al obtener datos' });
+      return;
+    }
+    res.json(results.rows);
+    console.log('select');
+  });
+});
 app.get('/api/registro', (req, res) => {
   
   pool.query('SELECT * FROM registro', (error, results) => {
