@@ -77,7 +77,7 @@ app.get('/api/registro', (req, res) => {
 
 app.post('/api/insertRegistro', (req, res) => {
   const { rut, entrada, salida, tipo, nDocumento} = req.body; // Datos del cuerpo de la solicitud
-  const query = 'INSERT INTO registro (id_registro, fecha_entrada, fecha_salida, empleado_id_emp, espacio_id_esp) VALUES ($1, $2, $3, $4, $5)';
+  const query = 'INSERT INTO REGISTRO (empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada) VALUES ($1,$2,$3,$4)';
   pool.query(query, [rut, entrada, salida, tipo, nDocumento], (error, results) => {
     if (error) {
       console.error('Error al insertar datos: ', error);
