@@ -76,8 +76,8 @@ app.get('/api/registro', (req, res) => {
 });
 
 app.post('/api/insertRegistro', (req, res) => {
-  const { empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada} = req.body; // Datos del cuerpo de la solicitud
-  const query = 'INSERT INTO REGISTRO (id_registro, empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada) VALUES (default,$2,$3,$4,$5)';
+  const { empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada } = req.body; // Datos del cuerpo de la solicitud
+  const query = 'INSERT INTO REGISTRO (id_registro, empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada) VALUES (default, $1, $2, $3, $4)';
   pool.query(query, [empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada], (error, results) => {
     if (error) {
       console.error('Error al insertar datos: ', error);
