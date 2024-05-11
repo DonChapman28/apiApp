@@ -33,8 +33,8 @@ pool.connect((err, client, release) => {
 });
 
 app.get('/login', (req, res) => {
-  const rut = req.query.rut; // Extraer la fecha de la solicitud
-  const contra_emp = req.query.contra_emp // Extraer la fecha de la solicitud
+  const rut = req.query.rut; // Extraer rut de la solicitud
+  const contra_emp = req.query.contra_emp // Extraer contraseña de la solicitud
   const query = 'SELECT * FROM empleado WHERE rut = $1 and contra_emp = $2';
   
   pool.query(query, [rut,contra_emp], (error, results) => {
@@ -44,7 +44,7 @@ app.get('/login', (req, res) => {
       return;
     }
     res.json(results.rows);
-    console.log('select');
+    console.log('login');
   });
 });
 
@@ -77,7 +77,7 @@ app.get('/api/registro', (req, res) => {
 
 app.post('/api/insertRegistro', (req, res) => {
   const { rut, entrada, salida, tipo, nDocumento} = req.body; // Datos del cuerpo de la solicitud
-  const query = 'INSERT INTO REGISTRO (empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada) VALUES ($1,$2,$3,$4)';
+  const query = 'INSERT INTO REGISTRO (id_registro, empleado_id_emp, espacio_id_esp, fecha_salida, fecha_entrada) VALUES (default, $1,$2,$3,$4)';
   pool.query(query, [rut, entrada, salida, tipo, nDocumento], (error, results) => {
     if (error) {
       console.error('Error al insertar datos: ', error);
@@ -85,7 +85,7 @@ app.post('/api/insertRegistro', (req, res) => {
       return;
     }
     res.json({ message: 'Datos insertados correctamente' });
-    console.log('insert');
+    console.log('grabar registro aseo');
   });
 });
 
