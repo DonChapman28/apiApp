@@ -89,6 +89,23 @@ app.post('/api/insertRegistro', (req, res) => {
   });
 });
 
+//registro con procedimiento almacenado
+app.post('/api/insertRegObs', (req, res) => {
+  const { empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida, p_tipo, p_observacion, p_enlace } = req.body;
+
+  const query = `CALL p_reg_obs($1, $2, $3, $4, $5, $6, $7)`;
+
+  pool.query(query, [p_emp_id, p_esp_id, p_hora_inicio, p_hora_fin, p_tipo, p_observacion, p_enlace], (error, results) => {
+    if (error) {
+      console.error('Error al llamar al procedimiento almacenado: ', error);
+      res.status(500).json({ error: 'Error al ejecutar el procedimiento almacenado' });
+      return;
+    }
+    res.json({ message: 'Procedimiento almacenado ejecutado correctamente' });
+    console.log('Procedimiento almacenado ejecutado');
+  });
+});
+
 app.post('/api/observacion', (req, res) => {
   const { rut, entrada, salida, tipo, nDocumento} = req.body; // Datos del cuerpo de la solicitud
   const query = 'INSERT INTO observacion (descripcion, registro_id_registro, tipo_observacion_id_categoria) VALUES ($1, $2, $3)';
