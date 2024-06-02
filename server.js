@@ -91,11 +91,11 @@ app.post('/api/insertRegistro', (req, res) => {
 
 //registro con procedimiento almacenado
 app.post('/api/insertRegObs', (req, res) => {
-  const { empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida, tipo, observacion, enlace } = req.body;
+  const { empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida, tipo, descripcion, enlace } = req.body;
 
   const query = `CALL p_reg_obs($1, $2, $3, $4, $5, $6, $7)`;
 
-  pool.query(query, [ empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida, tipo, observacion, enlace], (error, results) => {
+  pool.query(query, [ empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida, tipo, descripcion, enlace], (error, results) => {
     if (error) {
       console.error('Error al llamar al procedimiento almacenado: ', error);
       res.status(500).json({ error: 'Error al ejecutar el procedimiento almacenado' });
