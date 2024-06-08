@@ -109,9 +109,9 @@ app.post('/api/inicioAseo', (req, res) => {
 
 //insertar observacion
 app.post('/api/insertObservacion', (req, res) => {
-  const { obv_id, descripcion, enlace, id_registro, tipo_observacion } = req.body; // Datos del cuerpo de la solicitud
+  const { descripcion, enlace, id_registro, tipo_observacion } = req.body; // Datos del cuerpo de la solicitud
   const query = 'INSERT INTO OBSERVACION (obv_id, descripcion, enlace, id_registro, tipo_observacion) VALUES (default, $1, $2, $3, $4)';
-  pool.query(query, [obv_id, descripcion, enlace, id_registro, tipo_observacion ], (error, results) => {
+  pool.query(query, [descripcion, enlace, id_registro, tipo_observacion ], (error, results) => {
     if (error) {
       console.error('Error al insertar datos: ', error);
       res.status(500).json({ error: 'Error al insertar datos' });
@@ -124,10 +124,10 @@ app.post('/api/insertObservacion', (req, res) => {
 
 //modificar 
 app.put('/api/finalizarAseo', (req, res) => {
-  const { fecha_Salida,id_registro } = req.body; // Datos del cuerpo de la solicitud
+  const { fecha_salida,id_registro } = req.body; // Datos del cuerpo de la solicitud
   const query = 'UPDATE REGISTRO SET fecha_salida = $1 WHERE id_registro = $2';
 
-  pool.query(query, [fecha_Salida,id_registro], (error, results) => {
+  pool.query(query, [fecha_salida,id_registro], (error, results) => {
     if (error) {
       console.error('Error al actualizar datos: ', error);
       res.status(500).json({ error: 'Error al actualizar datos' });
