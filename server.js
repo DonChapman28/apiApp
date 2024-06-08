@@ -89,6 +89,65 @@ app.post('/api/insertRegistro', (req, res) => {
   });
 });
 
+//nuevos endpoints para registros
+app.post('/api/inicioAseo', (req, res) => {
+  const { empleado_id_emp, espacio_id_esp, fecha_entrada } = req.body; // Datos del cuerpo de la solicitud
+  const query = 'INSERT INTO REGISTRO (id_registro,empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida) VALUES (default,$1, $2, $3, null) RETURNING id_registro';
+  
+  pool.query(query, [empleado_id_emp, espacio_id_esp, fecha_entrada], (error, results) => {
+    if (error) {
+      console.error('Error al insertar datos: ', error);
+      res.status(500).json({ error: 'Error al insertar datos' });
+      return;
+    }
+
+    const idRegistro = results.rows[0].id_registro;
+    res.status(201).json({ idRegistro });
+    console.log('Registro de aseo grabado con ID:', idRegistro);
+  });
+});
+
+//insertar observacion
+app.post('/api/insertObservacion', (req, res) => {
+  const { obv_id, descripcion, enlace, id_registro, tipo_observacion } = req.body; // Datos del cuerpo de la solicitud
+  const query = 'INSERT INTO OBSERVACION (obv_id, descripcion, enlace, id_registro, tipo_observacion) VALUES (default, $1, $2, $3, $4)';
+  pool.query(query, [obv_id, descripcion, enlace, id_registro, tipo_observacion ], (error, results) => {
+    if (error) {
+      console.error('Error al insertar datos: ', error);
+      res.status(500).json({ error: 'Error al insertar datos' });
+      return;
+    }
+    res.json({ message: 'Datos insertados correctamente' });
+    console.log('grabar registro aseo');
+  });
+});
+
+//modificar 
+app.put('/api/finalizarAseo', (req, res) => {
+  const { idRegistro, fechaSalida } = req.body; // Datos del cuerpo de la solicitud
+  const query = 'UPDATE REGISTRO SET fecha_salida = $1 WHERE id_registro = $2';
+
+  pool.query(query, [idRegistro,fechaSalida], (error, results) => {
+    if (error) {
+      console.error('Error al actualizar datos: ', error);
+      res.status(500).json({ error: 'Error al actualizar datos' });
+      return;
+    }
+
+    res.status(200).json({ message: 'Datos actualizados correctamente' });
+    console.log('Registro de aseo finalizado con ID:', idRegistro);
+  });
+});
+
+
+
+
+
+
+
+
+
+
 //registro con procedimiento almacenado
 app.post('/api/insertRegObs', (req, res) => {
   const { empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida, tipo, descripcion, enlace } = req.body;
