@@ -101,9 +101,9 @@ app.post('/api/inicioAseo', (req, res) => {
       return;
     }
 
-    const id_Registro = results.rows[0].id_registro;
-    res.status(201).json({ id_Registro });
-    console.log('Registro de aseo grabado con ID:', id_Registro);
+    const id_registro = results.rows[0].id_registro;
+    res.status(201).json({ id_registro });
+    console.log('Registro de aseo grabado con ID:', id_registro);
   });
 });
 
@@ -124,10 +124,10 @@ app.post('/api/insertObservacion', (req, res) => {
 
 //modificar 
 app.put('/api/finalizarAseo', (req, res) => {
-  const { fechaSalida,idRegistro } = req.body; // Datos del cuerpo de la solicitud
+  const { fechaSalida,id_registro } = req.body; // Datos del cuerpo de la solicitud
   const query = 'UPDATE REGISTRO SET fecha_salida = $1 WHERE id_registro = $2';
 
-  pool.query(query, [fechaSalida,idRegistro], (error, results) => {
+  pool.query(query, [fechaSalida,id_registro], (error, results) => {
     if (error) {
       console.error('Error al actualizar datos: ', error);
       res.status(500).json({ error: 'Error al actualizar datos' });
@@ -135,7 +135,7 @@ app.put('/api/finalizarAseo', (req, res) => {
     }
 
     res.status(200).json({ message: 'Datos actualizados correctamente' });
-    console.log('Registro de aseo finalizado con ID:', idRegistro);
+    console.log('Registro de aseo finalizado con ID:', id_registro);
   });
 });
 
