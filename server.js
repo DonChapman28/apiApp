@@ -124,10 +124,10 @@ app.post('/api/insertObservacion', (req, res) => {
 
 //modificar 
 app.put('/api/finalizarAseo', (req, res) => {
-  const { idRegistro, fechaSalida } = req.body; // Datos del cuerpo de la solicitud
+  const { fechaSalida,idRegistro } = req.body; // Datos del cuerpo de la solicitud
   const query = 'UPDATE REGISTRO SET fecha_salida = $1 WHERE id_registro = $2';
 
-  pool.query(query, [idRegistro,fechaSalida], (error, results) => {
+  pool.query(query, [fechaSalida,idRegistro], (error, results) => {
     if (error) {
       console.error('Error al actualizar datos: ', error);
       res.status(500).json({ error: 'Error al actualizar datos' });
