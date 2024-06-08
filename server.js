@@ -101,9 +101,9 @@ app.post('/api/inicioAseo', (req, res) => {
       return;
     }
 
-    const idRegistro = results.rows[0].id_registro;
-    res.status(201).json({ idRegistro });
-    console.log('Registro de aseo grabado con ID:', idRegistro);
+    const id_Registro = results.rows[0].id_registro;
+    res.status(201).json({ id_Registro });
+    console.log('Registro de aseo grabado con ID:', id_Registro);
   });
 });
 
