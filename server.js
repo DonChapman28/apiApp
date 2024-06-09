@@ -140,7 +140,7 @@ app.get('/registros', (req, res) => {
       return;
     }
     res.json(results.rows);
-    console.log('select registros usuario');
+    console.log('select registros usuario' + id);
   });
 });
 
