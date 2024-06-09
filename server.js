@@ -62,18 +62,7 @@ app.get('/empleado', (req, res) => {
     console.log('select');
   });
 });
-app.get('/api/registro', (req, res) => {
-  
-  pool.query('SELECT * FROM registro', (error, results) => {
-    if (error) {
-      console.error('Error al realizar la consulta: ', error);
-      res.status(500).json({ error: 'Error al obtener datos' });
-      return;
-    }
-    res.json(results.rows);
-    console.log('select');
-  });
-});
+
 
 app.post('/api/insertRegistro', (req, res) => {
   const { empleado_id_emp, espacio_id_esp, fecha_entrada, fecha_salida } = req.body; // Datos del cuerpo de la solicitud
@@ -139,6 +128,21 @@ app.put('/api/finalizarAseo', (req, res) => {
   });
 });
 
+//solicitar registros por usuario
+app.get('/registros', (req, res) => {
+  const id = req.query.rut; // Extraer rut de la solicitud// Extraer contraseña de la solicitud
+  const query = 'select espacio_id_esp, fecha_entrada,fecha_salida from registro where empleado_id_emp = $1';
+  
+  pool.query(query, [id], (error, results) => {
+    if (error) {
+      console.error('Error al realizar la consulta: ', error);
+      res.status(500).json({ error: 'Error al obtener datos' });
+      return;
+    }
+    res.json(results.rows);
+    console.log('select registros usuario');
+  });
+});
 
 
 
