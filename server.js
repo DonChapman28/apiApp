@@ -131,7 +131,7 @@ app.put('/api/finalizarAseo', (req, res) => {
 //solicitar registros por usuario
 app.get('/registros', (req, res) => {
   const id = req.query.id; // Extraer rut de la solicitud// Extraer contraseña de la solicitud
-  const query = 'select espacio_id_esp, fecha_entrada,fecha_salida from registro where empleado_id_emp = $1';
+  const query = 'select id_registro,espacio_id_esp, fecha_entrada,fecha_salida from registro where empleado_id_emp = $1';
   
   pool.query(query, [id], (error, results) => {
     if (error) {
