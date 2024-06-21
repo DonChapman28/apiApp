@@ -144,6 +144,21 @@ app.get('/registros', (req, res) => {
   });
 });
 
+app.get('/horario', (req, res) => {
+  const dia = req.query.dia; // Extraer rut de la solicitud// Extraer contraseña de la solicitud
+  const query = 'select * from horario where dia = $1';
+  
+  pool.query(query, [dia], (error, results) => {
+    if (error) {
+      console.error('Error al realizar la consulta: ', error);
+      res.status(500).json({ error: 'Error al obtener datos' });
+      return;
+    }
+    res.json(results.rows);
+    console.log('select registros usuario');
+  });
+});
+
 
 
 
