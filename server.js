@@ -146,7 +146,7 @@ app.get('/registros', (req, res) => {
 
 app.get('/horario', (req, res) => {
   const dia = req.query.dia; // Extraer rut de la solicitud// Extraer contraseña de la solicitud
-  const query = 'select * from horario where dia = $1';
+  const query = 'select * from horario where dia = $1 order by hora_entrada asc';
   
   pool.query(query, [dia], (error, results) => {
     if (error) {
