@@ -148,7 +148,7 @@ app.get('/registrosCard', (req, res) => {
   const id = req.query.id; // Extraer rut de la solicitud// Extraer contraseña de la solicitud
   const query = `select id_registro, empleado.nombre, empleado.apellido_p, espacio_id_esp, fecha_entrada, fecha_salida from registro
 left join empleado on registro.empleado_id_emp = empleado.id_emp
-where registro.empleado_id_emp = $1`;
+where registro.empleado_id_emp = $1 order by id_registro desc`;
   
   pool.query(query, [id], (error, results) => {
     if (error) {
