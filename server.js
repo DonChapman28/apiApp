@@ -144,6 +144,24 @@ app.get('/registros', (req, res) => {
   });
 });
 
+app.get('/registrosCard', (req, res) => {
+  const id = req.query.id; // Extraer rut de la solicitud// Extraer contraseña de la solicitud
+  const query = `select id_registro, empleado.nombre, empleado.apellido_p, espacio_id_esp, nom_esp, fecha_entrada, fecha_salida from registro
+left join horario on registro.espacio_id_esp = horario.id_esp
+left join empleado on registro.empleado_id_emp = empleado.id_emp
+where registro.empleado_id_emp = $1`;
+  
+  pool.query(query, [id], (error, results) => {
+    if (error) {
+      console.error('Error al realizar la consulta: ', error);
+      res.status(500).json({ error: 'Error al obtener datos' });
+      return;
+    }
+    res.json(results.rows);
+    console.log('select registros usuario' + id);
+  });
+});
+
 app.get('/horario', (req, res) => {
   const dia = req.query.dia; // Extraer rut de la solicitud// Extraer contraseña de la solicitud
   const query = 'select * from horario where dia = $1 order by hora_entrada asc';
